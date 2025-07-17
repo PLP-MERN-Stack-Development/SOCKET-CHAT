@@ -4,7 +4,8 @@ import ProtectedRoute from './ProtectedRoute';
 import LoginPage from '../pages/auth/LoginPage';
 import RegisterPage from '../pages/auth/RegisterPage';
 import ChatPage from '../pages/chat/ChatPage';
-import NotFoundPage from '../pages/NotFoundPage'; // optional
+import PrivateChatPage from '../pages/chat/PrivateChatPage'; // ✅ add this import
+import NotFoundPage from '../pages/NotFoundPage';
 
 const AppRouter = () => {
   return (
@@ -16,9 +17,10 @@ const AppRouter = () => {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
 
-      {/* Protected route */}
+      {/* Protected routes */}
       <Route element={<ProtectedRoute />}>
         <Route path="/chat" element={<ChatPage />} />
+        <Route path="/private/:userId" element={<PrivateChatPage />} /> {/* ✅ new route */}
       </Route>
 
       {/* Catch-all route */}

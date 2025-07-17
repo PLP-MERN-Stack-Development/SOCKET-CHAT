@@ -3,7 +3,8 @@ import { useSocket } from './useSocket';
 
 export const useChat = (roomId) => {
   const { socket } = useSocket();
-  const [messages, setMessages] = useState([]);
+
+  const [messagesByRoom, setMessagesByRoom] = useState({});
   const [typingUsers, setTypingUsers] = useState([]);
   const typingUsersRef = useRef([]);
 
@@ -16,9 +17,19 @@ export const useChat = (roomId) => {
 
     socket.emit('join_room', roomId);
 
-    const handlePreviousMessages = (msgs) => setMessages(msgs);
-    const handleNewMessage = (message) =>
-      setMessages((prev) => [...prev, message]);
+    const handlePreviousMessages = (msgs) => {
+      setMessagesByRoom((prev) => ({
+        ...prev,
+        [roomId]: msgs,
+      }));
+    };
+
+    const handleNewMessage = (message) => {
+      setMessagesByRoom((prev) => ({
+        ...prev,
+        [roomId]: [...(prev[roomId] || []), message],
+      }));
+    };
 
     const handleTyping = (username) => {
       if (!typingUsersRef.current.includes(username)) {
@@ -60,6 +71,9 @@ export const useChat = (roomId) => {
     },
     [socket, roomId]
   );
+
+  // Messages for the active room only
+  const messages = messagesByRoom[roomId] || [];
 
   return { messages, typingUsers, sendMessage, sendTyping };
 };

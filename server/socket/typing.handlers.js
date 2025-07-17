@@ -1,27 +1,31 @@
-const User = require('../models/user.model');
-
 const setupTypingHandlers = (io, socket) => {
-  const typingUsers = new Set();
+  const typingRooms = new Map(); // roomId => Set of userIds
 
   const handleTyping = ({ roomId, isTyping }) => {
-    try {
-      if (isTyping) {
-        typingUsers.add(socket.userId);
-      } else {
-        typingUsers.delete(socket.userId);
-      }
-      
-      io.to(roomId).emit('typing_users', Array.from(typingUsers));
-    } catch (error) {
-      console.error('Error handling typing:', error);
+    if (!roomId) return;
+
+    if (!typingRooms.has(roomId)) {
+      typingRooms.set(roomId, new Set());
     }
+
+    const roomUsers = typingRooms.get(roomId);
+
+    if (isTyping) {
+      roomUsers.add(socket.userId);
+    } else {
+      roomUsers.delete(socket.userId);
+    }
+
+    io.to(roomId).emit('typing_users', Array.from(roomUsers));
   };
 
   socket.on('typing', handleTyping);
 
   socket.on('disconnect', () => {
-    typingUsers.delete(socket.userId);
-    socket.broadcast.emit('typing_users', Array.from(typingUsers));
+    typingRooms.forEach((userSet, roomId) => {
+      userSet.delete(socket.userId);
+      io.to(roomId).emit('typing_users', Array.from(userSet));
+    });
   });
 };
 

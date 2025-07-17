@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSocket } from '../../hooks/useSocket';
 
-const UserList = () => {
+const UserList = ({ onUserSelect }) => {
   const { socket } = useSocket();
   const [users, setUsers] = useState([]);
 
@@ -24,8 +24,16 @@ const UserList = () => {
       <h4 className="text-lg font-medium text-gray-700 mb-2">Online Users</h4>
       <ul className="space-y-2">
         {users.map((user) => (
-          <li key={user.id} className="flex items-center">
-            <span className={`inline-block w-2 h-2 rounded-full mr-2 ${user.online ? 'bg-green-500' : 'bg-gray-400'}`}></span>
+          <li
+            key={user.id}
+            onClick={() => onUserSelect(user)} // ✅ send selected user up
+            className="flex items-center cursor-pointer hover:bg-gray-100 px-2 py-1 rounded"
+          >
+            <span
+              className={`inline-block w-2 h-2 rounded-full mr-2 ${
+                user.online ? 'bg-green-500' : 'bg-gray-400'
+              }`}
+            ></span>
             <span className="text-gray-800">{user.username}</span>
           </li>
         ))}
