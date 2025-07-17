@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import AuthForm from './AuthForm';
 
 const RegisterForm = ({ onSubmit }) => {
@@ -12,6 +13,12 @@ const RegisterForm = ({ onSubmit }) => {
       <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8 max-w-md w-full shadow-xl border border-white/20">
         <h2 className="text-2xl font-bold mb-6 text-white text-center">Register</h2>
         <AuthForm fields={fields} onSubmit={onSubmit} buttonText="Register" />
+        <div className="mt-4 text-center text-white text-sm">
+          Already have an account?{' '}
+          <Link to="/login" className="font-semibold hover:underline">
+            Sign in
+          </Link>
+        </div>
       </div>
     </div>
   );
