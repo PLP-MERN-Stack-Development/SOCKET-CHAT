@@ -76,12 +76,10 @@ Authentication is managed using a simple JWT-based or session-based logic (based
 ## 🖼️ Screenshots
 
 ### 🔐 Login Interface
-![Login Interface](./client/public/login-interface.png)
+![Login Interface](./screenshots/login-interface.png)
 
 ### 💬 General Chat Interface
-![General Chat Interface](./client/public/general-chat-interface.png)
-
-> 📸 Make sure to take these screenshots and save them in a `screenshots/` folder in the project root.
+![General Chat Interface](./screenshots/general-chat-interface.png)
 
 ---
 
